@@ -61,6 +61,7 @@ export function setupUI({ viewManager, postfx, gallery, director }) {
       hint.textContent = 'Drag to orbit · Scroll to zoom';
     } else {
       director.start(letterboxOn);
+      setActiveViewButton(null);
       btnPlay.textContent = '⏸';
       btnPlay.classList.add('active');
       btnLetterbox.classList.add('active');
@@ -87,8 +88,6 @@ export function setupUI({ viewManager, postfx, gallery, director }) {
     ensureAudio();
     gallery.capture(viewManager.current.label);
   });
-
-  director.onShotChange = (shot) => setActiveViewButton(shot.key);
 
   window.addEventListener('pointerdown', ensureAudio, { once: true });
 }

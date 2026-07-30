@@ -9,7 +9,7 @@ A single-page 3D presentation built with **three.js** and **Vite**. Showcases a 
 - **Post-processing FX** — bloom (`UnrealBloomPass`), chromatic aberration, film grain and vignette via a custom shader pass, plus a toggle-able cinematic letterbox.
 - **Sound** — background music (`public/audio/theme.mp3`, "BalloonPlanet — From Memory to Destiny (No Backing Vocals)") plays through the Web Audio graph, layered under a synthesized sub-bass drone; camera-shutter SFX on screenshots and a UI blip on view changes are generated procedurally.
 - **Screenshot gallery** — capture the current camera view with a cinematic letterbox + timestamp burned in, browse a filmstrip, and download any shot as a PNG.
-- **Beat-synced auto-presentation** — the ▶ button starts a hands-off cinematic sequence that cuts to the next viewpoint on detected beats in the music (an `AnalyserNode` bass-onset detector), with bloom/FOV pulses reacting to the beat too.
+- **Beat-synced auto-presentation** — the ▶ button starts a hands-off mode that keeps looking at the model and eases the camera to a new position around it on detected beats in the music (an `AnalyserNode` bass-onset detector), with bloom/FOV pulses reacting to the beat too.
 
 ## Running locally
 
