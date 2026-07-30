@@ -25,7 +25,7 @@ const VIEW_DEFS = [
   {
     key: 'top',
     label: 'Top',
-    position: new THREE.Vector3(0.001, 4.2, 0.001),
+    position: new THREE.Vector3(1.0, 3.6, 1.2),
     fov: 38,
     autoRotate: false
   },

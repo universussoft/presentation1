@@ -63,8 +63,8 @@ export class Director {
     // frame, so beat pulses ride on top of the camera transition instead of
     // fighting it.
     const bass = getBassEnergy();
-    this.camera.fov -= bass * 5;
+    this.camera.fov -= bass * 1.8;
     this.camera.updateProjectionMatrix();
-    this.postfx.bloomPass.strength = this.baseBloom + bass * 1.3;
+    this.postfx.bloomPass.strength = this.baseBloom + bass * 0.8;
   }
 }
