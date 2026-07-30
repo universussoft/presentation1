@@ -1,0 +1,201 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #05070c;
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #eef2fb;
+}
+
+#scene-canvas {
+  position: fixed;
+  inset: 0;
+  display: block;
+}
+
+#loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: radial-gradient(circle at 50% 40%, #0d1526 0%, #05070c 70%);
+  transition: opacity 0.6s ease;
+}
+#loading-screen.hidden { opacity: 0; pointer-events: none; }
+
+.loading-title {
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: 0.35em;
+}
+.loading-title span { color: #5fd0ff; }
+
+.loading-bar {
+  width: 280px;
+  height: 3px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+#loading-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, #5fd0ff, #7a5fff);
+  transition: width 0.25s ease;
+}
+#loading-text {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+
+#ui-root {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: opacity 0.6s ease;
+}
+#ui-root.hidden { opacity: 0; }
+
+.hud-top {
+  pointer-events: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 28px;
+}
+.brand {
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  font-size: 0.95rem;
+  text-shadow: 0 0 20px rgba(95,208,255,0.5);
+}
+.brand span { color: #5fd0ff; }
+
+.hud-actions { display: flex; gap: 10px; }
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(10,14,22,0.55);
+  backdrop-filter: blur(8px);
+  color: #eef2fb;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.icon-btn:hover { background: rgba(95,208,255,0.18); border-color: #5fd0ff; transform: translateY(-1px); }
+.icon-btn.active { background: rgba(95,208,255,0.35); border-color: #5fd0ff; }
+
+.hud-hint {
+  pointer-events: none;
+  align-self: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  opacity: 0.45;
+  text-transform: uppercase;
+  transition: opacity 0.4s ease;
+}
+
+.hud-views {
+  pointer-events: auto;
+  align-self: center;
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  margin-bottom: 18px;
+  background: rgba(8,11,18,0.55);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+}
+.view-btn {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: rgba(238,242,251,0.65);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.view-btn:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.view-btn.active { color: #05070c; background: linear-gradient(90deg, #5fd0ff, #7a9dff); }
+
+.film-gallery {
+  pointer-events: auto;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  max-width: 320px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.film-gallery.has-shots { max-height: 220px; }
+
+.film-gallery-label {
+  padding: 8px 16px 4px;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.filmstrip {
+  display: flex;
+  gap: 8px;
+  padding: 0 16px 16px;
+  overflow-x: auto;
+}
+.film-frame {
+  position: relative;
+  flex: 0 0 auto;
+  width: 140px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+.film-frame img { display: block; width: 100%; height: auto; }
+.film-download {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 640px) {
+  .hud-views { flex-wrap: wrap; justify-content: center; max-width: 92vw; }
+  .hud-hint { display: none; }
+  .brand { font-size: 0.75rem; }
+}

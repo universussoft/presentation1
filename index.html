@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presentation1 — 3D Cinematic Showcase</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="scene-canvas"></canvas>
+
+  <div id="loading-screen">
+    <div class="loading-title">PRESENTATION<span>1</span></div>
+    <div class="loading-bar"><div id="loading-fill"></div></div>
+    <div id="loading-text">Loading scene…</div>
+  </div>
+
+  <div id="ui-root" class="hidden">
+    <header class="hud-top">
+      <div class="brand">PRESENTATION<span>1</span></div>
+      <div class="hud-actions">
+        <button id="btn-mute" class="icon-btn" title="Mute / Unmute">🔊</button>
+        <button id="btn-letterbox" class="icon-btn" title="Cinematic Letterbox">🎬</button>
+        <button id="btn-shot" class="icon-btn" title="Capture Screenshot">📷</button>
+      </div>
+    </header>
+
+    <nav id="view-nav" class="hud-views"></nav>
+
+    <div id="hint" class="hud-hint">Drag to look around · Scroll to zoom · Choose a view below</div>
+
+    <section id="gallery" class="film-gallery">
+      <div class="film-gallery-label">Captured Shots</div>
+      <div id="filmstrip" class="filmstrip"></div>
+    </section>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
