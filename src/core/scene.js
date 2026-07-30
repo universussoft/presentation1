@@ -74,7 +74,7 @@ export function createScene(canvas) {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
   controls.dampingFactor = 0.06;
-  controls.minDistance = 1.5;
+  controls.minDistance = 1.0;
   controls.maxDistance = 40;
   controls.target.set(0, 0.6, 0);
   controls.maxPolarAngle = Math.PI * 0.51;
@@ -109,10 +109,6 @@ export function createScene(canvas) {
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   scene.add(ground);
-
-  const grid = new THREE.GridHelper(30, 60, 0x00e5ff, 0x081018);
-  grid.position.y = 0.001;
-  scene.add(grid);
 
   const holoPad = new THREE.Mesh(
     new THREE.CircleGeometry(2.6, 64),
@@ -149,5 +145,5 @@ export function createScene(canvas) {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  return { scene, camera, renderer, controls, ground, grid, holoPad, techRings };
+  return { scene, camera, renderer, controls, ground, holoPad, techRings };
 }

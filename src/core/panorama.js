@@ -54,26 +54,6 @@ function drawSkyCanvas() {
   ctx.lineTo(w, horizonY);
   ctx.stroke();
 
-  const vanishX = w * 0.5;
-  ctx.strokeStyle = 'rgba(0, 200, 255, 0.22)';
-  ctx.lineWidth = 1;
-  for (let i = -10; i <= 10; i++) {
-    const xBottom = vanishX + i * (w * 0.09);
-    ctx.beginPath();
-    ctx.moveTo(vanishX, horizonY);
-    ctx.lineTo(xBottom, h);
-    ctx.stroke();
-  }
-  for (let d = 0; d < 8; d++) {
-    const t = d / 8;
-    const y = horizonY + (h - horizonY) * t * t;
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(w, y);
-    ctx.strokeStyle = `rgba(0, 210, 255, ${0.28 * (1 - t)})`;
-    ctx.stroke();
-  }
-
   return canvas;
 }
 

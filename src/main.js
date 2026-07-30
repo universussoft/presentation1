@@ -16,7 +16,7 @@ const uiRoot = document.getElementById('ui-root');
 const galleryEl = document.getElementById('gallery');
 const filmstripEl = document.getElementById('filmstrip');
 
-const { scene, camera, renderer, controls, ground, grid, holoPad, techRings } = createScene(canvas);
+const { scene, camera, renderer, controls, ground, holoPad, techRings } = createScene(canvas);
 
 const sky = createPanoramicSky();
 scene.background = sky;
@@ -27,7 +27,7 @@ const postfx = createPostFX(renderer, scene, camera);
 const viewManager = new ViewManager({
   camera,
   controls,
-  sceneObjects: { model: null, ground, grid, extras: [holoPad, ...techRings] }
+  sceneObjects: { model: null, ground, extras: [holoPad, ...techRings] }
 });
 
 const gallery = new ScreenshotGallery({

@@ -4,33 +4,33 @@ const VIEW_DEFS = [
   {
     key: 'orbit',
     label: 'Orbit',
-    position: new THREE.Vector3(4.2, 2.1, 4.6),
-    target: new THREE.Vector3(0, 0.6, 0),
-    fov: 45,
+    position: new THREE.Vector3(2.7, 1.5, 3.0),
+    target: new THREE.Vector3(0, 0.65, 0),
+    fov: 42,
     autoRotate: false
   },
   {
     key: 'front',
     label: 'Front',
-    position: new THREE.Vector3(0, 1.0, 5.4),
+    position: new THREE.Vector3(0, 0.9, 3.4),
     target: new THREE.Vector3(0, 0.7, 0),
-    fov: 40,
+    fov: 36,
     autoRotate: false
   },
   {
     key: 'side',
     label: 'Side',
-    position: new THREE.Vector3(5.6, 1.2, 0.2),
+    position: new THREE.Vector3(3.5, 1.0, 0.15),
     target: new THREE.Vector3(0, 0.7, 0),
-    fov: 40,
+    fov: 36,
     autoRotate: false
   },
   {
     key: 'top',
     label: 'Top',
-    position: new THREE.Vector3(0.2, 6.2, 0.4),
+    position: new THREE.Vector3(0.15, 4.2, 0.3),
     target: new THREE.Vector3(0, 0.5, 0),
-    fov: 42,
+    fov: 38,
     autoRotate: false
   },
   {
@@ -44,9 +44,9 @@ const VIEW_DEFS = [
   {
     key: 'cinematic',
     label: 'Cinematic',
-    position: new THREE.Vector3(6.5, 1.4, 2.2),
-    target: new THREE.Vector3(0, 0.6, 0),
-    fov: 38,
+    position: new THREE.Vector3(4.2, 1.15, 1.6),
+    target: new THREE.Vector3(0, 0.65, 0),
+    fov: 34,
     autoRotate: true
   },
   {
@@ -89,18 +89,17 @@ export class ViewManager {
     this._to.fov = def.fov;
     this._t = 0;
 
-    const { model, ground, grid, extras } = this.sceneObjects;
+    const { model, ground, extras } = this.sceneObjects;
     const showWorld = !def.panoramic;
     if (model) model.visible = showWorld;
     if (ground) ground.visible = showWorld;
-    if (grid) grid.visible = showWorld;
     if (extras) for (const obj of extras) obj.visible = showWorld;
 
     this.controls.autoRotate = !!def.autoRotate;
     this.controls.autoRotateSpeed = 0.6;
     this.controls.enablePan = !def.panoramic;
     this.controls.enableZoom = !def.panoramic;
-    this.controls.minDistance = def.panoramic ? 0.001 : 1.5;
+    this.controls.minDistance = def.panoramic ? 0.001 : 1.0;
     this.controls.maxDistance = def.panoramic ? 0.05 : 40;
   }
 
