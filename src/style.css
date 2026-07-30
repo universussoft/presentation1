@@ -56,6 +56,55 @@ html, body {
 }
 #loading-screen.hidden { opacity: 0; pointer-events: none; }
 
+#enter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 2, 5, 0.55);
+  backdrop-filter: blur(2px);
+  cursor: pointer;
+  transition: opacity 0.5s ease;
+}
+#enter-overlay.hidden { opacity: 0; pointer-events: none; }
+
+.enter-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 36px 56px;
+  border: 1px solid var(--cyan);
+  background: var(--panel);
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  box-shadow: 0 0 30px var(--cyan-dim);
+  animation: enter-pulse 2.2s ease-in-out infinite;
+}
+.enter-play {
+  font-size: 1.6rem;
+  color: var(--cyan);
+  text-shadow: 0 0 16px var(--cyan);
+}
+.enter-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  font-size: 1rem;
+}
+.enter-sub {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  color: var(--cyan);
+}
+@keyframes enter-pulse {
+  0%, 100% { box-shadow: 0 0 24px var(--cyan-dim); }
+  50% { box-shadow: 0 0 42px rgba(0,229,255,0.5); }
+}
+
 .loading-title {
   font-family: 'Orbitron', sans-serif;
   font-size: 2.3rem;

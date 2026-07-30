@@ -7,12 +7,14 @@ import { createPostFX } from './core/postfx.js';
 import { ScreenshotGallery } from './core/screenshot.js';
 import { Director } from './core/director.js';
 import { setupUI } from './core/ui.js';
+import { initAudio, playClick } from './core/audio.js';
 
 const canvas = document.getElementById('scene-canvas');
 const loadingScreen = document.getElementById('loading-screen');
 const loadingFill = document.getElementById('loading-fill');
 const loadingText = document.getElementById('loading-text');
 const uiRoot = document.getElementById('ui-root');
+const enterOverlay = document.getElementById('enter-overlay');
 const galleryEl = document.getElementById('gallery');
 const filmstripEl = document.getElementById('filmstrip');
 
@@ -52,8 +54,15 @@ loadModel(scene, (p) => {
   setTimeout(() => {
     loadingScreen.classList.add('hidden');
     uiRoot.classList.remove('hidden');
+    enterOverlay.classList.remove('hidden');
   }, 350);
 });
+
+enterOverlay.addEventListener('click', () => {
+  initAudio();
+  playClick();
+  enterOverlay.classList.add('hidden');
+}, { once: true });
 
 const clock = new THREE.Clock();
 
