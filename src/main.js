@@ -46,6 +46,12 @@ loadModel(scene, (p) => {
   loadingFill.style.width = `${Math.round(p * 100)}%`;
 }).then(({ root, isPlaceholder }) => {
   viewManager.sceneObjects.model = root;
+
+  const box = new THREE.Box3().setFromObject(root);
+  const center = box.getCenter(new THREE.Vector3());
+  viewManager.setModelCenter(center.y);
+  viewManager.goTo('orbit');
+
   if (isPlaceholder) {
     loadingText.textContent = 'Model asset incomplete — showing placeholder showcase mesh';
   }

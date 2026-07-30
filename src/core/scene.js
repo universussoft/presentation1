@@ -56,7 +56,7 @@ export function createScene(canvas) {
     0.05,
     500
   );
-  camera.position.set(4.2, 2.1, 4.6);
+  camera.position.set(2.7, 1.5, 3.0);
 
   const renderer = new THREE.WebGLRenderer({
     canvas,
@@ -76,7 +76,7 @@ export function createScene(canvas) {
   controls.dampingFactor = 0.06;
   controls.minDistance = 1.0;
   controls.maxDistance = 40;
-  controls.target.set(0, 0.6, 0);
+  controls.target.set(0, 0.65, 0);
   controls.maxPolarAngle = Math.PI * 0.51;
 
   const keyLight = new THREE.DirectionalLight(0xbfe9ff, 2.2);

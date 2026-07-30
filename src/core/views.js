@@ -5,7 +5,6 @@ const VIEW_DEFS = [
     key: 'orbit',
     label: 'Orbit',
     position: new THREE.Vector3(2.7, 1.5, 3.0),
-    target: new THREE.Vector3(0, 0.65, 0),
     fov: 42,
     autoRotate: false
   },
@@ -13,7 +12,6 @@ const VIEW_DEFS = [
     key: 'front',
     label: 'Front',
     position: new THREE.Vector3(0, 0.9, 3.4),
-    target: new THREE.Vector3(0, 0.7, 0),
     fov: 36,
     autoRotate: false
   },
@@ -21,15 +19,13 @@ const VIEW_DEFS = [
     key: 'side',
     label: 'Side',
     position: new THREE.Vector3(3.5, 1.0, 0.15),
-    target: new THREE.Vector3(0, 0.7, 0),
     fov: 36,
     autoRotate: false
   },
   {
     key: 'top',
     label: 'Top',
-    position: new THREE.Vector3(0.15, 4.2, 0.3),
-    target: new THREE.Vector3(0, 0.5, 0),
+    position: new THREE.Vector3(0.001, 4.2, 0.001),
     fov: 38,
     autoRotate: false
   },
@@ -37,15 +33,13 @@ const VIEW_DEFS = [
     key: 'detail',
     label: 'Detail',
     position: new THREE.Vector3(1.1, 1.25, 1.4),
-    target: new THREE.Vector3(0.2, 0.95, 0.1),
-    fov: 32,
+    fov: 26,
     autoRotate: false
   },
   {
     key: 'cinematic',
     label: 'Cinematic',
     position: new THREE.Vector3(4.2, 1.15, 1.6),
-    target: new THREE.Vector3(0, 0.65, 0),
     fov: 34,
     autoRotate: true
   },
@@ -65,6 +59,7 @@ export class ViewManager {
     this.camera = camera;
     this.controls = controls;
     this.sceneObjects = sceneObjects;
+    this.modelCenter = new THREE.Vector3(0, 0.65, 0);
     this.current = VIEW_DEFS[0];
     this._from = { position: camera.position.clone(), target: controls.target.clone(), fov: camera.fov };
     this._to = { position: camera.position.clone(), target: controls.target.clone(), fov: camera.fov };
@@ -76,16 +71,25 @@ export class ViewManager {
     return VIEW_DEFS.map((v) => ({ key: v.key, label: v.label }));
   }
 
+  setModelCenter(y) {
+    this.modelCenter.set(0, y, 0);
+    if (this.current && !this.current.panoramic) {
+      this.controls.target.copy(this.modelCenter);
+      this._to.target.copy(this.modelCenter);
+    }
+  }
+
   goTo(key) {
     const def = VIEW_DEFS.find((v) => v.key === key);
     if (!def) return;
     this.current = def;
+    const targetPoint = def.panoramic ? def.target : this.modelCenter;
 
     this._from.position.copy(this.camera.position);
     this._from.target.copy(this.controls.target);
     this._from.fov = this.camera.fov;
     this._to.position.copy(def.position);
-    this._to.target.copy(def.target);
+    this._to.target.copy(targetPoint);
     this._to.fov = def.fov;
     this._t = 0;
 
