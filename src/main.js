@@ -5,6 +5,7 @@ import { createPanoramicSky } from './core/panorama.js';
 import { ViewManager } from './core/views.js';
 import { createPostFX } from './core/postfx.js';
 import { ScreenshotGallery } from './core/screenshot.js';
+import { Director } from './core/director.js';
 import { setupUI } from './core/ui.js';
 
 const canvas = document.getElementById('scene-canvas');
@@ -39,7 +40,9 @@ const gallery = new ScreenshotGallery({
   filmstripEl
 });
 
-setupUI({ viewManager, postfx, gallery });
+const director = new Director({ viewManager, postfx, camera });
+
+setupUI({ viewManager, postfx, gallery, director });
 
 loadingText.textContent = 'Loading model…';
 loadModel(scene, (p) => {
@@ -61,6 +64,7 @@ function animate() {
   requestAnimationFrame(animate);
   const dt = Math.min(clock.getDelta(), 0.1);
   viewManager.update(dt);
+  director.update(dt);
   postfx.update(dt);
   postfx.composer.render();
 }

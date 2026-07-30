@@ -27,13 +27,13 @@ function buildAmbient() {
   droneFilter.Q.value = 0.7;
 
   const droneGain = c.createGain();
-  droneGain.gain.value = 0.07;
+  droneGain.gain.value = 0.025;
 
   const sub = c.createOscillator();
   sub.type = 'sine';
   sub.frequency.value = 27.5;
   const subGain = c.createGain();
-  subGain.gain.value = 0.18;
+  subGain.gain.value = 0.05;
 
   const lfo = c.createOscillator();
   lfo.type = 'sine';
@@ -54,7 +54,7 @@ function buildAmbient() {
   noiseFilter.frequency.value = 700;
   noiseFilter.Q.value = 0.5;
   const noiseGain = c.createGain();
-  noiseGain.gain.value = 0.02;
+  noiseGain.gain.value = 0.008;
 
   drone.connect(droneFilter);
   droneFilter.connect(droneGain);
@@ -75,12 +75,62 @@ function buildAmbient() {
   return { drone, sub, lfo, noise, droneGain, subGain, noiseGain };
 }
 
+const MUSIC_URL = 'audio/theme.mp3';
+const MUSIC_TITLE = 'BalloonPlanet — From Memory to Destiny (No Backing Vocals)';
+let musicEl = null;
+let musicGain = null;
+
+function buildMusic() {
+  const c = getCtx();
+  musicEl = new Audio(encodeURI(MUSIC_URL));
+  musicEl.loop = true;
+  musicEl.crossOrigin = 'anonymous';
+
+  const source = c.createMediaElementSource(musicEl);
+  musicGain = c.createGain();
+  musicGain.gain.value = 0.7;
+  source.connect(musicGain);
+  musicGain.connect(masterGain);
+
+  analyser = c.createAnalyser();
+  analyser.fftSize = 512;
+  analyser.smoothingTimeConstant = 0.75;
+  freqData = new Uint8Array(analyser.frequencyBinCount);
+  musicGain.connect(analyser);
+
+  musicEl.play().catch(() => {
+    // Autoplay can still be blocked on some browsers even after a user gesture;
+    // the next click on any HUD control retries via the pointerdown fallback in ui.js.
+  });
+}
+
+let analyser = null;
+let freqData = null;
+
+export function getBassEnergy() {
+  if (!analyser) return 0;
+  analyser.getByteFrequencyData(freqData);
+  let sum = 0;
+  const bins = 10;
+  for (let i = 1; i <= bins; i++) sum += freqData[i];
+  return sum / bins / 255;
+}
+
 export function initAudio() {
   if (started) return;
   started = true;
   const c = getCtx();
   if (c.state === 'suspended') c.resume();
   ambientNodes = buildAmbient();
+  buildMusic();
+}
+
+export function getMusicTitle() {
+  return MUSIC_TITLE;
+}
+
+export function retryMusicPlayback() {
+  if (musicEl && musicEl.paused) musicEl.play().catch(() => {});
 }
 
 export function toggleMute() {

@@ -1,8 +1,9 @@
 import { ViewManager } from './views.js';
-import { initAudio, toggleMute, playClick, playViewSwitch } from './audio.js';
+import { initAudio, toggleMute, playClick, playViewSwitch, getMusicTitle, retryMusicPlayback } from './audio.js';
 
-export function setupUI({ viewManager, postfx, gallery }) {
+export function setupUI({ viewManager, postfx, gallery, director }) {
   const viewNav = document.getElementById('view-nav');
+  const btnPlay = document.getElementById('btn-play');
   const btnMute = document.getElementById('btn-mute');
   const btnLetterbox = document.getElementById('btn-letterbox');
   const btnShot = document.getElementById('btn-shot');
@@ -11,11 +12,29 @@ export function setupUI({ viewManager, postfx, gallery }) {
   let letterboxOn = false;
   let audioStarted = false;
 
+  btnMute.title = `Mute / Unmute — now playing: ${getMusicTitle()}`;
+
   const ensureAudio = () => {
     if (!audioStarted) {
       audioStarted = true;
       initAudio();
+    } else {
+      retryMusicPlayback();
     }
+  };
+
+  const setActiveViewButton = (key) => {
+    for (const b of viewNav.querySelectorAll('.view-btn')) {
+      b.classList.toggle('active', b.dataset.key === key);
+    }
+  };
+
+  const stopPresentation = () => {
+    if (!director.active) return;
+    director.stop();
+    btnPlay.textContent = '▶';
+    btnPlay.classList.remove('active');
+    btnLetterbox.classList.toggle('active', letterboxOn);
   };
 
   for (const view of ViewManager.list) {
@@ -25,16 +44,31 @@ export function setupUI({ viewManager, postfx, gallery }) {
     btn.dataset.key = view.key;
     btn.addEventListener('click', () => {
       ensureAudio();
+      stopPresentation();
       playViewSwitch();
       viewManager.goTo(view.key);
-      for (const b of viewNav.querySelectorAll('.view-btn')) b.classList.remove('active');
-      btn.classList.add('active');
+      setActiveViewButton(view.key);
       hint.textContent = view.key === 'panoramic'
         ? 'Drag to look around the 360° environment'
         : 'Drag to orbit · Scroll to zoom';
     });
     viewNav.appendChild(btn);
   }
+
+  btnPlay.addEventListener('click', () => {
+    ensureAudio();
+    playClick();
+    if (director.active) {
+      stopPresentation();
+      hint.textContent = 'Drag to orbit · Scroll to zoom';
+    } else {
+      director.start(letterboxOn);
+      btnPlay.textContent = '⏸';
+      btnPlay.classList.add('active');
+      btnLetterbox.classList.add('active');
+      hint.textContent = 'Auto presentation playing — click any view to take over';
+    }
+  });
 
   btnMute.addEventListener('click', () => {
     ensureAudio();
@@ -55,6 +89,8 @@ export function setupUI({ viewManager, postfx, gallery }) {
     ensureAudio();
     gallery.capture(viewManager.current.label);
   });
+
+  director.onShotChange = (shot) => setActiveViewButton(shot.key);
 
   window.addEventListener('pointerdown', ensureAudio, { once: true });
 }

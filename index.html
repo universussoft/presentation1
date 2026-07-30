@@ -19,15 +19,17 @@
     <header class="hud-top">
       <div class="brand">PRESENTATION<span>1</span></div>
       <div class="hud-actions">
+        <button id="btn-play" class="icon-btn" title="Play Auto Presentation">▶</button>
         <button id="btn-mute" class="icon-btn" title="Mute / Unmute">🔊</button>
         <button id="btn-letterbox" class="icon-btn" title="Cinematic Letterbox">🎬</button>
         <button id="btn-shot" class="icon-btn" title="Capture Screenshot">📷</button>
       </div>
     </header>
 
-    <nav id="view-nav" class="hud-views"></nav>
-
-    <div id="hint" class="hud-hint">Drag to look around · Scroll to zoom · Choose a view below</div>
+    <div class="hud-bottom">
+      <nav id="view-nav" class="hud-views"></nav>
+      <div id="hint" class="hud-hint">Drag to look around · Scroll to zoom · Choose a view below</div>
+    </div>
 
     <section id="gallery" class="film-gallery">
       <div class="film-gallery-label">Captured Shots</div>
