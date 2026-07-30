@@ -10,7 +10,6 @@ const CinematicShader = {
     tDiffuse: { value: null },
     uTime: { value: 0 },
     uVignette: { value: 0.6 },
-    uScanline: { value: 0.06 },
     uAberration: { value: 0.0026 },
     uLetterbox: { value: 0.0 }
   },
@@ -25,7 +24,6 @@ const CinematicShader = {
     uniform sampler2D tDiffuse;
     uniform float uTime;
     uniform float uVignette;
-    uniform float uScanline;
     uniform float uAberration;
     uniform float uLetterbox;
     varying vec2 vUv;
@@ -51,9 +49,6 @@ const CinematicShader = {
       float vig = smoothstep(0.95, 0.2, dist * (1.0 + uVignette));
       color *= mix(1.0, vig, uVignette);
       color += vec3(0.0, 0.05, 0.09) * (1.0 - vig) * 0.4;
-
-      float scan = sin((uv.y * 900.0) - uTime * 3.0) * 0.5 + 0.5;
-      color -= scan * uScanline;
 
       float grain = (noise(uv * vec2(1920.0, 1080.0) + fract(uTime) * 100.0) - 0.5) * 0.02;
       color += grain;
