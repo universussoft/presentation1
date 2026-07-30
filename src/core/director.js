@@ -1,13 +1,13 @@
-import { getBassEnergy } from './audio.js';
+import { getBassEnergy, detectBeat } from './audio.js';
 
 const SEQUENCE = [
-  { key: 'cinematic', hold: 7 },
-  { key: 'front', hold: 5 },
-  { key: 'detail', hold: 5 },
-  { key: 'side', hold: 5 },
-  { key: 'top', hold: 5 },
-  { key: 'panoramic', hold: 6 },
-  { key: 'orbit', hold: 7 }
+  { key: 'cinematic', minHold: 3.0, maxHold: 9 },
+  { key: 'front', minHold: 2.2, maxHold: 7 },
+  { key: 'detail', minHold: 2.2, maxHold: 7 },
+  { key: 'side', minHold: 2.2, maxHold: 7 },
+  { key: 'top', minHold: 2.2, maxHold: 7 },
+  { key: 'panoramic', minHold: 3.0, maxHold: 8 },
+  { key: 'orbit', minHold: 3.0, maxHold: 9 }
 ];
 
 export class Director {
@@ -53,11 +53,17 @@ export class Director {
     if (!this.active) return;
     this.elapsed += dt;
     const shot = SEQUENCE[this.index];
-    if (this.elapsed >= shot.hold) this._advance();
+    const onBeat = detectBeat();
 
+    if (this.elapsed >= shot.maxHold || (this.elapsed >= shot.minHold && onBeat)) {
+      this._advance();
+    }
+
+    // Nudge (not reset) whatever fov/bloom the view tween already set this
+    // frame, so beat pulses ride on top of the camera transition instead of
+    // fighting it.
     const bass = getBassEnergy();
-    const baseFov = this.viewManager.current.fov;
-    this.camera.fov = baseFov - bass * 5;
+    this.camera.fov -= bass * 5;
     this.camera.updateProjectionMatrix();
     this.postfx.bloomPass.strength = this.baseBloom + bass * 1.3;
   }

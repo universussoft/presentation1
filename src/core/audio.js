@@ -116,6 +116,22 @@ export function getBassEnergy() {
   return sum / bins / 255;
 }
 
+const beatHistory = [];
+let lastBeatTime = -Infinity;
+
+export function detectBeat() {
+  if (!analyser) return false;
+  const bass = getBassEnergy();
+  beatHistory.push(bass);
+  if (beatHistory.length > 40) beatHistory.shift();
+  const avg = beatHistory.reduce((a, b) => a + b, 0) / beatHistory.length;
+
+  const now = ctx.currentTime;
+  const isBeat = bass > avg * 1.35 && bass > 0.16 && now - lastBeatTime > 0.28;
+  if (isBeat) lastBeatTime = now;
+  return isBeat;
+}
+
 export function initAudio() {
   if (started) return;
   started = true;

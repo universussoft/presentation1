@@ -48,9 +48,7 @@ export function setupUI({ viewManager, postfx, gallery, director }) {
       playViewSwitch();
       viewManager.goTo(view.key);
       setActiveViewButton(view.key);
-      hint.textContent = view.key === 'panoramic'
-        ? 'Drag to look around the 360° environment'
-        : 'Drag to orbit · Scroll to zoom';
+      hint.textContent = 'Drag to orbit · Scroll to zoom';
     });
     viewNav.appendChild(btn);
   }

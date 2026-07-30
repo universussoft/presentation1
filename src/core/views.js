@@ -41,24 +41,23 @@ const VIEW_DEFS = [
     label: 'Cinematic',
     position: new THREE.Vector3(4.2, 1.15, 1.6),
     fov: 34,
-    autoRotate: true
+    autoRotate: true,
+    autoRotateSpeed: 0.6
   },
   {
     key: 'panoramic',
     label: 'Panoramic 360',
-    position: new THREE.Vector3(0, 1.65, 0.001),
-    target: new THREE.Vector3(0, 1.65, -1),
-    fov: 70,
-    autoRotate: false,
-    panoramic: true
+    position: new THREE.Vector3(0, 1.3, 4.6),
+    fov: 55,
+    autoRotate: true,
+    autoRotateSpeed: 1.6
   }
 ];
 
 export class ViewManager {
-  constructor({ camera, controls, sceneObjects }) {
+  constructor({ camera, controls }) {
     this.camera = camera;
     this.controls = controls;
-    this.sceneObjects = sceneObjects;
     this.modelCenter = new THREE.Vector3(0, 0.65, 0);
     this.current = VIEW_DEFS[0];
     this._from = { position: camera.position.clone(), target: controls.target.clone(), fov: camera.fov };
@@ -73,38 +72,29 @@ export class ViewManager {
 
   setModelCenter(y) {
     this.modelCenter.set(0, y, 0);
-    if (this.current && !this.current.panoramic) {
-      this.controls.target.copy(this.modelCenter);
-      this._to.target.copy(this.modelCenter);
-    }
+    this.controls.target.copy(this.modelCenter);
+    this._to.target.copy(this.modelCenter);
   }
 
   goTo(key) {
     const def = VIEW_DEFS.find((v) => v.key === key);
     if (!def) return;
     this.current = def;
-    const targetPoint = def.panoramic ? def.target : this.modelCenter;
 
     this._from.position.copy(this.camera.position);
     this._from.target.copy(this.controls.target);
     this._from.fov = this.camera.fov;
     this._to.position.copy(def.position);
-    this._to.target.copy(targetPoint);
+    this._to.target.copy(this.modelCenter);
     this._to.fov = def.fov;
     this._t = 0;
 
-    const { model, ground, extras } = this.sceneObjects;
-    const showWorld = !def.panoramic;
-    if (model) model.visible = showWorld;
-    if (ground) ground.visible = showWorld;
-    if (extras) for (const obj of extras) obj.visible = showWorld;
-
     this.controls.autoRotate = !!def.autoRotate;
-    this.controls.autoRotateSpeed = 0.6;
-    this.controls.enablePan = !def.panoramic;
-    this.controls.enableZoom = !def.panoramic;
-    this.controls.minDistance = def.panoramic ? 0.001 : 1.0;
-    this.controls.maxDistance = def.panoramic ? 0.05 : 40;
+    this.controls.autoRotateSpeed = def.autoRotateSpeed ?? 0.6;
+    this.controls.enablePan = true;
+    this.controls.enableZoom = true;
+    this.controls.minDistance = 1.0;
+    this.controls.maxDistance = 40;
   }
 
   update(dt) {

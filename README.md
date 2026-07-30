@@ -5,10 +5,11 @@ A single-page 3D presentation built with **three.js** and **Vite**. Showcases a 
 ## Features
 
 - **Multiple views** — Orbit, Front, Side, Top, Detail close-up and an auto-rotating Cinematic dolly, with smooth eased camera transitions.
-- **Panoramic 360° mode** — first-person look-around inside a procedurally generated night-sky environment (canvas-based equirectangular texture, no HDRI file needed).
+- **Panoramic 360° mode** — a wide-angle auto-rotating orbit that circles fully around the model against a procedurally generated cyber-grid sky (canvas-based equirectangular texture, no HDRI file needed).
 - **Post-processing FX** — bloom (`UnrealBloomPass`), chromatic aberration, film grain and vignette via a custom shader pass, plus a toggle-able cinematic letterbox.
 - **Sound** — background music (`public/audio/theme.mp3`, "BalloonPlanet — From Memory to Destiny (No Backing Vocals)") plays through the Web Audio graph, layered under a synthesized sub-bass drone; camera-shutter SFX on screenshots and a UI blip on view changes are generated procedurally.
 - **Screenshot gallery** — capture the current camera view with a cinematic letterbox + timestamp burned in, browse a filmstrip, and download any shot as a PNG.
+- **Beat-synced auto-presentation** — the ▶ button starts a hands-off cinematic sequence that cuts to the next viewpoint on detected beats in the music (an `AnalyserNode` bass-onset detector), with bloom/FOV pulses reacting to the beat too.
 
 ## Running locally
 

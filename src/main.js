@@ -16,7 +16,7 @@ const uiRoot = document.getElementById('ui-root');
 const galleryEl = document.getElementById('gallery');
 const filmstripEl = document.getElementById('filmstrip');
 
-const { scene, camera, renderer, controls, ground, holoPad, techRings } = createScene(canvas);
+const { scene, camera, renderer, controls, holoPad, techRings } = createScene(canvas);
 
 const sky = createPanoramicSky();
 scene.background = sky;
@@ -24,11 +24,7 @@ scene.environment = sky;
 
 const postfx = createPostFX(renderer, scene, camera);
 
-const viewManager = new ViewManager({
-  camera,
-  controls,
-  sceneObjects: { model: null, ground, extras: [holoPad, ...techRings] }
-});
+const viewManager = new ViewManager({ camera, controls });
 
 const gallery = new ScreenshotGallery({
   renderer,
@@ -45,8 +41,6 @@ loadingText.textContent = 'Loading model…';
 loadModel(scene, (p) => {
   loadingFill.style.width = `${Math.round(p * 100)}%`;
 }).then(({ root, isPlaceholder }) => {
-  viewManager.sceneObjects.model = root;
-
   const box = new THREE.Box3().setFromObject(root);
   const center = box.getCenter(new THREE.Vector3());
   viewManager.setModelCenter(center.y);
