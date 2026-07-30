@@ -89,11 +89,12 @@ export class ViewManager {
     this._to.fov = def.fov;
     this._t = 0;
 
-    const { model, ground, grid } = this.sceneObjects;
+    const { model, ground, grid, extras } = this.sceneObjects;
     const showWorld = !def.panoramic;
     if (model) model.visible = showWorld;
     if (ground) ground.visible = showWorld;
     if (grid) grid.visible = showWorld;
+    if (extras) for (const obj of extras) obj.visible = showWorld;
 
     this.controls.autoRotate = !!def.autoRotate;
     this.controls.autoRotateSpeed = 0.6;

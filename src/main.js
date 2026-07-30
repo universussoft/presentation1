@@ -16,21 +16,18 @@ const uiRoot = document.getElementById('ui-root');
 const galleryEl = document.getElementById('gallery');
 const filmstripEl = document.getElementById('filmstrip');
 
-const { scene, camera, renderer, controls } = createScene(canvas);
+const { scene, camera, renderer, controls, ground, grid, holoPad, techRings } = createScene(canvas);
 
 const sky = createPanoramicSky();
 scene.background = sky;
 scene.environment = sky;
-
-const groundMesh = scene.children.find((c) => c.geometry && c.geometry.type === 'CircleGeometry');
-const gridMesh = scene.children.find((c) => c.isGridHelper);
 
 const postfx = createPostFX(renderer, scene, camera);
 
 const viewManager = new ViewManager({
   camera,
   controls,
-  sceneObjects: { model: null, ground: groundMesh, grid: gridMesh }
+  sceneObjects: { model: null, ground, grid, extras: [holoPad, ...techRings] }
 });
 
 const gallery = new ScreenshotGallery({
@@ -66,6 +63,12 @@ function animate() {
   viewManager.update(dt);
   director.update(dt);
   postfx.update(dt);
+
+  holoPad.rotation.z += dt * 0.05;
+  techRings.forEach((ring, i) => {
+    ring.rotation.z += dt * (i % 2 === 0 ? 0.18 : -0.14) * (i + 1);
+  });
+
   postfx.composer.render();
 }
 

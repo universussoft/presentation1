@@ -9,9 +9,9 @@ const CinematicShader = {
   uniforms: {
     tDiffuse: { value: null },
     uTime: { value: 0 },
-    uVignette: { value: 0.55 },
-    uGrain: { value: 0.045 },
-    uAberration: { value: 0.0022 },
+    uVignette: { value: 0.6 },
+    uScanline: { value: 0.06 },
+    uAberration: { value: 0.0026 },
     uLetterbox: { value: 0.0 }
   },
   vertexShader: /* glsl */ `
@@ -25,7 +25,7 @@ const CinematicShader = {
     uniform sampler2D tDiffuse;
     uniform float uTime;
     uniform float uVignette;
-    uniform float uGrain;
+    uniform float uScanline;
     uniform float uAberration;
     uniform float uLetterbox;
     varying vec2 vUv;
@@ -46,10 +46,16 @@ const CinematicShader = {
       float b = texture2D(tDiffuse, uv + dir * shift).b;
       vec3 color = vec3(r, g, b);
 
-      float vig = smoothstep(0.9, 0.25, dist * (1.0 + uVignette));
-      color *= mix(1.0, vig, uVignette);
+      color = mix(color, color * vec3(0.82, 1.0, 1.12), 0.28);
 
-      float grain = (noise(uv * vec2(1920.0, 1080.0) + fract(uTime) * 100.0) - 0.5) * uGrain;
+      float vig = smoothstep(0.95, 0.2, dist * (1.0 + uVignette));
+      color *= mix(1.0, vig, uVignette);
+      color += vec3(0.0, 0.05, 0.09) * (1.0 - vig) * 0.4;
+
+      float scan = sin((uv.y * 900.0) - uTime * 3.0) * 0.5 + 0.5;
+      color -= scan * uScanline;
+
+      float grain = (noise(uv * vec2(1920.0, 1080.0) + fract(uTime) * 100.0) - 0.5) * 0.02;
       color += grain;
 
       float bar = uLetterbox * 0.12;
@@ -71,9 +77,9 @@ export function createPostFX(renderer, scene, camera) {
 
   const bloomPass = new UnrealBloomPass(
     new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.65,
-    0.5,
-    0.82
+    0.85,
+    0.55,
+    0.72
   );
   composer.addPass(bloomPass);
 

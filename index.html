@@ -3,21 +3,26 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Presentation1 — 3D Cinematic Showcase</title>
+  <title>Presentation_1 — Hi-Tech 3D Showcase</title>
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 <body>
   <canvas id="scene-canvas"></canvas>
+  <div id="scanline-overlay"></div>
+  <div class="hud-corner tl"></div>
+  <div class="hud-corner tr"></div>
+  <div class="hud-corner bl"></div>
+  <div class="hud-corner br"></div>
 
   <div id="loading-screen">
-    <div class="loading-title">PRESENTATION<span>1</span></div>
+    <div class="loading-title">PRESENTATION<span>_1</span></div>
     <div class="loading-bar"><div id="loading-fill"></div></div>
-    <div id="loading-text">Loading scene…</div>
+    <div id="loading-text">// INITIALIZING SYSTEM…</div>
   </div>
 
   <div id="ui-root" class="hidden">
     <header class="hud-top">
-      <div class="brand">PRESENTATION<span>1</span></div>
+      <div class="brand">PRESENTATION<span>_1</span></div>
       <div class="hud-actions">
         <button id="btn-play" class="icon-btn" title="Play Auto Presentation">▶</button>
         <button id="btn-mute" class="icon-btn" title="Mute / Unmute">🔊</button>

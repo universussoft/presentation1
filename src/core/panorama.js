@@ -9,20 +9,20 @@ function drawSkyCanvas() {
   const ctx = canvas.getContext('2d');
 
   const sky = ctx.createLinearGradient(0, 0, 0, h);
-  sky.addColorStop(0.0, '#01030a');
-  sky.addColorStop(0.35, '#050b1c');
-  sky.addColorStop(0.55, '#0d1c3a');
-  sky.addColorStop(0.72, '#1c3f6b');
-  sky.addColorStop(0.82, '#4a7fb0');
-  sky.addColorStop(0.9, '#e8b073');
-  sky.addColorStop(1.0, '#100b08');
+  sky.addColorStop(0.0, '#000103');
+  sky.addColorStop(0.3, '#020814');
+  sky.addColorStop(0.55, '#03101f');
+  sky.addColorStop(0.74, '#041a2c');
+  sky.addColorStop(0.84, '#062338');
+  sky.addColorStop(0.9, '#0a3548');
+  sky.addColorStop(1.0, '#00050a');
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, w, h);
 
-  const glow = ctx.createRadialGradient(w * 0.5, h * 0.83, 0, w * 0.5, h * 0.83, w * 0.22);
-  glow.addColorStop(0, 'rgba(255, 210, 150, 0.9)');
-  glow.addColorStop(0.4, 'rgba(255, 170, 110, 0.35)');
-  glow.addColorStop(1, 'rgba(255, 170, 110, 0)');
+  const glow = ctx.createRadialGradient(w * 0.5, h * 0.88, 0, w * 0.5, h * 0.88, w * 0.3);
+  glow.addColorStop(0, 'rgba(0, 230, 255, 0.55)');
+  glow.addColorStop(0.4, 'rgba(0, 190, 255, 0.18)');
+  glow.addColorStop(1, 'rgba(0, 190, 255, 0)');
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, w, h);
 
@@ -31,28 +31,48 @@ function drawSkyCanvas() {
     seed = (seed * 16807) % 2147483647;
     return (seed - 1) / 2147483646;
   };
-  for (let i = 0; i < 1400; i++) {
+  for (let i = 0; i < 900; i++) {
     const x = rand() * w;
-    const y = rand() * h * 0.65;
-    const r = rand() * 1.3 + 0.15;
-    const a = rand() * 0.8 + 0.2;
-    ctx.fillStyle = `rgba(255,255,255,${a.toFixed(2)})`;
+    const y = rand() * h * 0.62;
+    const r = rand() * 1.2 + 0.15;
+    const a = rand() * 0.7 + 0.15;
+    const cyan = rand() > 0.85;
+    ctx.fillStyle = cyan ? `rgba(140,230,255,${a.toFixed(2)})` : `rgba(255,255,255,${a.toFixed(2)})`;
     ctx.beginPath();
     ctx.arc(x, y, r, 0, Math.PI * 2);
     ctx.fill();
   }
 
-  ctx.fillStyle = 'rgba(6,10,18,0.9)';
+  const horizonY = h * 0.82;
+  ctx.fillStyle = '#010509';
+  ctx.fillRect(0, horizonY, w, h - horizonY);
+
+  ctx.strokeStyle = 'rgba(0, 225, 255, 0.55)';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(0, h * 0.86);
-  for (let x = 0; x <= w; x += w / 24) {
-    const y = h * 0.86 + Math.sin(x * 0.01) * 10 + Math.sin(x * 0.003) * 22;
-    ctx.lineTo(x, y);
+  ctx.moveTo(0, horizonY);
+  ctx.lineTo(w, horizonY);
+  ctx.stroke();
+
+  const vanishX = w * 0.5;
+  ctx.strokeStyle = 'rgba(0, 200, 255, 0.22)';
+  ctx.lineWidth = 1;
+  for (let i = -10; i <= 10; i++) {
+    const xBottom = vanishX + i * (w * 0.09);
+    ctx.beginPath();
+    ctx.moveTo(vanishX, horizonY);
+    ctx.lineTo(xBottom, h);
+    ctx.stroke();
   }
-  ctx.lineTo(w, h);
-  ctx.lineTo(0, h);
-  ctx.closePath();
-  ctx.fill();
+  for (let d = 0; d < 8; d++) {
+    const t = d / 8;
+    const y = horizonY + (h - horizonY) * t * t;
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(w, y);
+    ctx.strokeStyle = `rgba(0, 210, 255, ${0.28 * (1 - t)})`;
+    ctx.stroke();
+  }
 
   return canvas;
 }
